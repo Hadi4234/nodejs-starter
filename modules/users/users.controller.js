@@ -1,3 +1,4 @@
+import sendResponse from "../../shared/SendResponse.js";
 import asyncHandler from "../../utils/asyncHandler.js";
 import { userServices } from "./users.service.js";
 
@@ -13,24 +14,35 @@ const createUser = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllUser = async (req, res) => {
+const getAllUser = asyncHandler(async (req, res,next) => {
   try {
     const user = await userServices.getAllUser();
-    res.json(user);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Request successfully',
+      data: user
+  });
   } catch (err) {
-    console.log(err);
+    next(err);
   }
-};
+})
 
-const getUserById = async (req, res) => {
+const getUserById = asyncHandler(async (req, res, next) => {
   try {
     const { id, name } = req.params;
-    const user = await userServices.getUserById(id, name);
-    res.json(user);
+    const result = await userServices.getUserById(id, name);
+    // res.json(result)
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Request successfully',
+      data: result
+  });
   } catch (err) {
-    console.log(err);
+    next(err);
   }
-};
+});
 
 export const userControllers = {
   createUser,

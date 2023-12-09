@@ -22,6 +22,7 @@ const getUserById = async (id) => {
       id: parseInt(id),
     },
   });
+  // if user error then throw error
   return user;
 };
 
